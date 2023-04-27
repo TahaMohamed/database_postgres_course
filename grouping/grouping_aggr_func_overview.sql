@@ -25,8 +25,8 @@ FROM film;
 SELECT MAX(replacement_cost)
 FROM film;
 
--- Can't use column name with aggregate method becuase it return 
--- a single value but column may be return multiple.
+-- Can't use column name with aggregate method becuase it return a single value 
+-- but column may be return multiple, if needed we should use GROUP BY.
 
 SELECT MAX(replacement_cost), MIN(replacement_cost)
 FROM film;
