@@ -16,3 +16,5 @@
 
 
 - [Date time format!](https://www.postgresql.org/docs/12/functions-formatting.html)
+- [Math Functions!](https://www.postgresql.org/docs/current/functions-math.html)
+- [String Functions!](https://www.postgresql.org/docs/current/functions-string.html)
