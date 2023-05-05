@@ -16,11 +16,13 @@ WHERE membercost != 0;
 -- monthly maintenance of the facilities in question.
 
 SELECT facid, name, membercost, monthlymaintenance FROM cd.facilities
-WHERE membercost < (1/50 * monthlymaintenance);
+-- WHERE membercost < ((1/50.0) * monthlymaintenance) AND membercost > 0
+WHERE membercost < (monthlymaintenance/50.0) AND membercost > 0;
 
 -- #5-How can you produce a list of all facilities with the word 'Tennis' in their name?
 
 SELECT * FROM cd.facilities
+-- WHERE name ILIKE '%tennis%'
 WHERE name LIKE '%Tennis%';
 
 -- #7-How can you retrieve the details of facilities with ID 1 and 5? 
@@ -52,6 +54,9 @@ ORDER BY joindate DESC
 LIMIT 1;
 
 
+SELECT MAX(joindate) AS Start_at FROM cd.members 
+ORDER BY Start_at DESC;
+
 -- #10-Produce a count of the number of facilities that have a cost to guests of 10 or more.
 
 SELECT COUNT(*) FROM cd.facilities
@@ -62,16 +67,20 @@ WHERE guestcost >= 10;
 
 
 SELECT facid, SUM(slots) AS "Number of slots" FROM cd.bookings
-WHERE starttime BETWEEN '2012-09-01' AND '2012-09-30 23:59:59.999999'
+-- WHERE starttime BETWEEN '2012-09-01' AND '2012-09-30 23:59:59.999999'
+-- WHERE starttime BETWEEN '2012-09-01' AND '2012-10-01'
+WHERE starttime >= '2012-09-01' AND starttime <= '2012-10-01'
 -- WHERE TRIM(TO_CHAR(starttime,'YYYY-Month')) >= '2012-September'
-GROUP BY facid; 
+GROUP BY facid
+ORDER BY "Number of slots"; 
 
 -- #12-Produce a list of facilities with more than 1000 slots booked. 
 -- Produce an output table consisting of facility id and total slots, sorted by facility id.
 
 SELECT facid, SUM(slots) FROM cd.bookings
 GROUP BY facid
-HAVING SUM(slots) > 1000;
+HAVING SUM(slots) > 1000
+ORDER BY facid;
 
 -- #13-How can you produce a list of the start times 
 -- for bookings for tennis courts, for the date '2012-09-21'? 
@@ -93,6 +102,13 @@ ORDER BY bookings.starttime;
 SELECT * FROM cd.bookings;
 SELECT * FROM cd.members;
 
+
+SELECT TO_CHAR(starttime,'YYYY-MM-DD HH:II') AS "START TIME" FROM cd.bookings
+INNER JOIN cd.members
+ON cd.members.memid = cd.bookings.memid
+WHERE firstname = 'David' AND surname = 'Farrell';
+
 SELECT TO_CHAR(starttime,'YYYY-MM-DD HH:II') AS "START TIME" FROM cd.bookings
 WHERE memid IN (SELECT memid FROM cd.members
 WHERE firstname = 'David' AND surname = 'Farrell');
+
